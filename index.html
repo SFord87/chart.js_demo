@@ -3,30 +3,30 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+const labels = [8:00,8:05,8:10,8:15,8:20,8:25,8:30,8:35];
 
 const data = {
   labels,
   datasets: [
     {
-      label: 'Line A',
-      data: [10, 20, 15, 30, 25, 40],
-      borderColor: 'red',
+      label: 'Einstein Bagel',
+      data: [6,5,4],
+      borderColor: 'yellow',
       borderWidth: 2,
       pointRadius: 0,
       tension: 0.3
     },
     {
-      label: 'Line B',
-      data: [5, 15, 25, 20, 35, 45],
-      borderColor: 'blue',
+      label: 'Dunkin',
+      data: [16,14,11,15,11,10],
+      borderColor: 'orange',
       borderWidth: 2,
       pointRadius: 0,
       tension: 0.3
     },
     {
-      label: 'Line C',
-      data: [15, 10, 20, 25, 30, 35],
+      label: 'Panera',
+      data: [13,14,14,12],
       borderColor: 'green',
       borderWidth: 2,
       pointRadius: 0,
@@ -35,7 +35,7 @@ const data = {
   ]
 };
 
-const totalDuration = 1000;
+const totalDuration = 1000; /*lower time, faster animation*/
 const maxPoints = Math.max(...data.datasets.map(ds => ds.data.length));
 const delayBetweenPoints = totalDuration / maxPoints;
 
