@@ -37,11 +37,19 @@ const chart = new Chart(ctx, {
       }
     ]
   },
-  options: {
-    animation: {
-      duration: 2000,
-      easing: 'easeInOutQuart'
-    },
+options: {
+  animation: {
+    duration: 2000,
+    easing: 'linear',
+    delay(context) {
+      if (context.type === 'data' &&
+          context.mode === 'default') {
+        return context.datasetIndex * 1000;
+      }
+      return 0;
+    }
+  }
+},
     scales: {
       y: {
         beginAtZero: true
