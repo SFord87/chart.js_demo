@@ -1,0 +1,52 @@
+<canvas id="myChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('myChart');
+
+const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Line A',
+        data: [10, 20, 15, 30, 25, 40],
+        borderColor: 'red',
+        borderWidth: 2,
+        fill: false,
+        tension: 0.3
+      },
+      {
+        label: 'Line B',
+        data: [5, 15, 25, 20, 35, 45],
+        borderColor: 'blue',
+        borderWidth: 2,
+        fill: false,
+        tension: 0.3
+      },
+      {
+        label: 'Line C',
+        data: [15, 10, 20, 25, 30, 35],
+        borderColor: 'green',
+        borderWidth: 2,
+        fill: false,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    animation: {
+      duration: 2000,
+      easing: 'easeInOutQuart'
+    },
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+</script>
