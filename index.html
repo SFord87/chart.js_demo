@@ -1,55 +1,97 @@
+
 <canvas id="myChart"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const ctx = document.getElementById('myChart');
-
 const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
 
-const chart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels,
-    datasets: [
-      {
-        label: 'Line A',
-        data: [10, 20, 15, 30, 25, 40],
-        borderColor: 'red',
-        borderWidth: 2,
-        fill: false,
-        tension: 0.3
-      },
-      {
-        label: 'Line B',
-        data: [5, 15, 25, 20, 35, 45],
-        borderColor: 'blue',
-        borderWidth: 2,
-        fill: false,
-        tension: 0.3
-      },
-      {
-        label: 'Line C',
-        data: [15, 10, 20, 25, 30, 35],
-        borderColor: 'green',
-        borderWidth: 2,
-        fill: false,
-        tension: 0.3
-      }
-    ]
-  },
-options: {
-  animation: {
-    duration: 2000,
+const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Line A',
+      data: [10, 20, 15, 30, 25, 40],
+      borderColor: 'red',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.3
+    },
+    {
+      label: 'Line B',
+      data: [5, 15, 25, 20, 35, 45],
+      borderColor: 'blue',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.3
+    },
+    {
+      label: 'Line C',
+      data: [15, 10, 20, 25, 30, 35],
+      borderColor: 'green',
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.3
+    }
+  ]
+};
+
+const totalDuration = 10000;
+const maxPoints = Math.max(...data.datasets.map(ds => ds.data.length));
+const delayBetweenPoints = totalDuration / maxPoints;
+
+const previousY = (ctx) => {
+  if (ctx.index === 0) {
+    return ctx.chart.scales.y.getPixelForValue(0);
+  }
+
+  return ctx.chart
+    .getDatasetMeta(ctx.datasetIndex)
+    .data[ctx.index - 1]
+    .getProps(['y'], true).y;
+};
+
+const animation = {
+  x: {
+    type: 'number',
     easing: 'linear',
-    delay(context) {
-      if (context.type === 'data' &&
-          context.mode === 'default') {
-        return context.datasetIndex * 1000;
-      }
-      return 0;
+    duration: delayBetweenPoints,
+    from: NaN,
+    delay(ctx) {
+      if (ctx.type !== 'data' || ctx.xStarted) return 0;
+      ctx.xStarted = true;
+      return ctx.index * delayBetweenPoints;
     }
   },
+  y: {
+    type: 'number',
+    easing: 'linear',
+    duration: delayBetweenPoints,
+    from: previousY,
+    delay(ctx) {
+      if (ctx.type !== 'data' || ctx.yStarted) return 0;
+      ctx.yStarted = true;
+      return ctx.index * delayBetweenPoints;
+    }
+  }
+};
+
+new Chart(document.getElementById('myChart'), {
+  type: 'line',
+  data,
+  options: {
+    animation,
+    interaction: {
+      intersect: false
+    },
+    plugins: {
+      legend: {
+        display: true
+      }
+    },
     scales: {
+      x: {
+        type: 'category'
+      },
       y: {
         beginAtZero: true
       }
